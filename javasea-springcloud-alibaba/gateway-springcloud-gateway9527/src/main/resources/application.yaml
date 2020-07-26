@@ -1,0 +1,18 @@
+spring:
+  cloud:
+    gateway:
+#      discovery:
+#        locator:
+#          enabled: true # 开启动态路由，利用服务名进行路由
+      routes:
+        - id: gateway-provider   # 路由id，需要唯一，一般就是服务名
+#          uri: http://127.0.0.1:8003  # 服务的实际url, 静态路由方式
+          uri: lb://gateway-provider   # 动态路由方式, lb是负载均衡意思，gateway-provider是微服务名称
+          predicates:
+            - Path=/provider/serverPort
+            - Path=/provider/get/**
+        - id: gateway-consumer   # 路由id，需要唯一，一般就是服务名
+#          uri: http://127.0.0.1:8004  # 服务的实际url, 静态路由方式
+          uri: lb://gateway-consumer    # 动态路由方式
+          predicates:
+            - Path=/consumer/get/**

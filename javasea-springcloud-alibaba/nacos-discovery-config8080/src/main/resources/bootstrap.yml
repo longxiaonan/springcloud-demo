@@ -1,0 +1,19 @@
+server:
+  port: 8080 # 服务器端口。默认为 8080
+spring:
+  application:
+    name: provider-demo-provider # Spring 应用名
+  cloud:
+    nacos:
+      # Nacos 作为注册中心的配置项，对应 NacosDiscoveryProperties 配置类
+      discovery:
+        server-addr: 106.12.11.240:8848 # Nacos 服务器地址
+        service: ${spring.application.name} # 注册到 Nacos 的服务名。默认值为 ${spring.application.name}。
+      config:
+        server-addr: 106.12.11.240:8848 # Nacos 服务器地址
+        file-extension: yaml #指定yaml格式的配置
+
+# 在 Nacos Spring Cloud 中，dataId 的完整格式如下： ${prefix}-${spring.profile.active}.${file-extension}
+# 也就是${spring.application.name}-${spring.profile.active}.${spring.cloud.provider.config.file-extension}
+# 既需要在nacos配置文件名为：provider-demo-provider-dev.yaml
+

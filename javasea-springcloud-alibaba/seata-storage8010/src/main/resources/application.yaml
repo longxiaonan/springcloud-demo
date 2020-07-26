@@ -1,0 +1,87 @@
+spring:
+  profiles:
+    active: dev
+  datasource:
+    url: jdbc:mysql://localhost:3306/seata_storage?allowMultiQueries=true&autoReconnect=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useUnicode=true&serverTimezone=Asia/Shanghai&nullCatalogMeansCurrent=true
+    username: root
+    password: 123456
+#    type: com.alibaba.druid.pool.DruidDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    filters: stat,wall,slf4j
+    maxActive: 20
+    initialSize: 5
+    maxWait: 60000
+    minIdle: 5
+    timeBetweenEvictionRunsMillis: 60000
+    minEvictableIdleTimeMillis: 300000
+    validationQuery: SELECT 1 FROM DUAL
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: true
+    maxPoolPreparedStatementPerConnectionSize: 20
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+
+##seata配置,相当于registry.conf
+seata:
+  enabled: true
+  application-id: ${spring.application.name}
+  tx-service-group: my_test_tx_group
+  enable-auto-data-source-proxy: true
+  #  service:
+  #    disable-global-transaction: false
+  #    grouplist:
+  #      default: 192.168.116.130:8091
+  registry:
+    type: nacos
+    nacos:
+      application: seata-server
+      server-addr: 106.12.11.240:8848
+      namespace:
+  #      userName: "nacos"
+  #      password: "nacos"
+  config:
+    type: nacos
+    nacos:
+      namespace:
+      serverAddr: 106.12.11.240:8848
+      group: SEATA_GROUP
+#      userName: "nacos"
+#      password: "nacos"
+
+
+##设置feign超时时间,否则时间过短,造成数据不一致问题
+ribbon:
+  ConnectTimeout: 10000 # ribbon链接超时时长
+  ReadTimeout: 10000 # ribbon读取超时时间长
+  OkToRetryOnAllOperations: false
+mybatis-plus:
+  #  configuration:mybatis.mapper-locations=classpath:mapper/*.xml
+  #    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  mapper-locations: classpath:/mapper/**/*Mapper.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  typeAliasesPackage: com.javasea.storage.entity
+  global-config:
+    # 数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID",ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: UUID
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: not_empty
+      #驼峰下划线转换
+      column-underline: true
+      #数据库大写下划线转换
+      #capital-mode: true
+      # 逻辑删除配置
+      logic-delete-value: 0
+      logic-not-delete-value: 1
+      db-type: mysql
+    #刷新mapper 调试神器
+    refresh: true
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
