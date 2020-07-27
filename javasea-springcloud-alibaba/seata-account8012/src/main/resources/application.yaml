@@ -50,7 +50,7 @@ seata:
     type: nacos
     nacos:
       application: seata-server
-      server-addr: 106.12.11.240:8848
+      server-addr: ${NACOS_SERVER:localhost}:8848
       namespace:
   #      userName: "nacos"
   #      password: "nacos"
@@ -58,7 +58,7 @@ seata:
     type: nacos
     nacos:
       namespace:
-      serverAddr: 106.12.11.240:8848
+      serverAddr: ${NACOS_SERVER:localhost}:8848
       group: SEATA_GROUP
 #      userName: "nacos"
 #      password: "nacos"
