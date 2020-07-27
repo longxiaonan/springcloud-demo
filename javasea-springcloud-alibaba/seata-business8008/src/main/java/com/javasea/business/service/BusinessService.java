@@ -6,6 +6,7 @@ import io.seata.core.context.RootContext;
 import io.seata.spring.annotation.GlobalTransactional;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
@@ -24,7 +25,7 @@ public class BusinessService {
      * @param commodityCode
      * @param orderCount
      */
-    @GlobalTransactional(timeoutMills = 300000)
+    @Transactional(rollbackFor = Exception.class)
     public void purchase(String userId, String commodityCode, int orderCount) {
         log.info("开始全局事务，XID = " + RootContext.getXID());
         // 减库存
